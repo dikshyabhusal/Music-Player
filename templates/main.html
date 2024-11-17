@@ -1,0 +1,63 @@
+<div class="container mt-4">
+    <!-- Song Card -->
+    <div class="row">
+        {% for item in page_obj %}
+            <div class="col-md-6 offset-md-3">
+                <div class="card mb-4 shadow-lg">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ item.image.url }}" class="img-fluid rounded-start" alt="Cover Image">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">{{ item.title }}</h5>
+                                <p class="card-text text-secondary"><small>By {{ item.artist }}</small></p>
+                                <p class="card-text"><small class="text-muted">Duration: {{ item.duration }}</small></p>
+                                
+                                <!-- Audio Element -->
+                                <audio id="audio-{{ forloop.counter }}" class="audio-player">
+                                    <source src="{% if item.audio_file %}{{ item.audio_file.url }}{% else %}{{ item.audio_link }}{% endif %}" type="audio/mp3">
+                                    Your browser does not support the audio element.
+                                </audio>
+    
+                                <!-- Playback Controls -->
+                                <div class="playback-controls mt-3">
+                                    <button class="btn btn-secondary prev-btn" data-index="{{ forloop.counter0 }}">
+                                        <i class="fa fa-step-backward"></i> Previous
+                                    </button>
+                                    <button class="btn btn-primary play-btn" data-index="{{ forloop.counter0 }}">
+                                        <i class="fa fa-play"></i> Play
+                                    </button>
+                                    <button class="btn btn-secondary next-btn" data-index="{{ forloop.counter0 }}">
+                                        <i class="fa fa-step-forward"></i> Next
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div id="all-songs" class="mt-5">
+        <h3 class="text-center">All Songs</h3>
+        <ul class="list-group">
+            {% for item in all_songs %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {% if item.id %}
+                        <a href="{% url 'app:song_detail' item.id %}">{{ item.title }} - {{ item.artist }}</a>
+                    {% else %}
+                        <span class="text-danger">Invalid Song (No ID): {{ item.title }}</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    
+    <!-- About Section -->
+    <div id="about" class="mt-5 text-center">
+        <h3>About</h3>
+        <p>This is a music player application built using Django. It allows you to browse songs, view details, and play audio files.</p>
+    </div>
+</div>
